@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTasks } from '../context/TasksContext.jsx'
-import { getMonthDays, monthNames, isToday } from '../utils/dateUtils.js'
+import { getMonthDays, monthNames, isToday, formatDateLocal } from '../utils/dateUtils.js'
 
 const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 
@@ -48,7 +48,7 @@ export default function CalendarView() {
           <div key={d} className="calendar-weekday">{d}</div>
         ))}
         {days.map((day, i) => {
-          const dateStr = day.date.toISOString().slice(0, 10)
+          const dateStr = formatDateLocal(day.date)
           const dayTasks = tasks.filter(t => t.date === dateStr).slice(0, 3)
 
           return (

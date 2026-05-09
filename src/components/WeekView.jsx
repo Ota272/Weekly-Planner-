@@ -1,5 +1,5 @@
 import { useTasks } from '../context/TasksContext.jsx'
-import { getWeekDates, isToday, getDayName } from '../utils/dateUtils.js'
+import { getWeekDates, isToday, getDayName, formatDateLocal } from '../utils/dateUtils.js'
 
 const categoryMap = {
   work: { class: 'priority-work', tag: 'tag-work', label: 'Работа' },
@@ -17,7 +17,7 @@ export default function WeekView({ onTaskClick, onAddTask }) {
     <div className="week-view">
       <div className="week-grid">
         {weekDates.map((date, dayIndex) => {
-          const dateStr = date.toISOString().slice(0, 10)
+          const dateStr = formatDateLocal(date)
           const dayTasks = tasks
             .filter(t => t.date === dateStr)
             .sort((a, b) => a.time.localeCompare(b.time))

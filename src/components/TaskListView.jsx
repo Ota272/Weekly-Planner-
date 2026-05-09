@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTasks } from '../context/TasksContext.jsx'
+import { formatDateLocal } from '../utils/dateUtils.js'
 
 const categoryMap = {
   work: { tag: 'tag-work', label: 'Работа', color: '#4f6ef7' },
@@ -13,10 +14,10 @@ export default function TaskListView({ onTaskClick }) {
   const { tasks, addTask } = useTasks()
   const [newTaskText, setNewTaskText] = useState('')
 
-  const todayStr = new Date().toISOString().slice(0, 10)
+  const todayStr = formatDateLocal(new Date())
   const tomorrowDate = new Date()
   tomorrowDate.setDate(tomorrowDate.getDate() + 1)
-  const tomorrowStr = tomorrowDate.toISOString().slice(0, 10)
+  const tomorrowStr = formatDateLocal(tomorrowDate)
 
   const todayTasks = tasks.filter(t => t.date === todayStr)
   const tomorrowTasks = tasks.filter(t => t.date === tomorrowStr)

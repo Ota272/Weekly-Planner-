@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTasks } from '../context/TasksContext.jsx'
-import { getWeekDates } from '../utils/dateUtils.js'
+import { getWeekDates, formatDateLocal } from '../utils/dateUtils.js'
 
 const categories = [
   { value: 'work', label: 'Работа' },
@@ -15,8 +15,8 @@ export default function NewTaskModal({ dayIndex, onClose }) {
 
   const weekDates = getWeekDates(weekOffset)
   const defaultDate = dayIndex != null
-    ? weekDates[dayIndex].toISOString().slice(0, 10)
-    : new Date().toISOString().slice(0, 10)
+    ? formatDateLocal(weekDates[dayIndex])
+    : formatDateLocal(new Date())
 
   const [title, setTitle] = useState('')
   const [time, setTime] = useState('09:00')
