@@ -15,6 +15,20 @@ export default function DrawingView() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+    
+    canvas.width = canvas.parentElement.clientWidth
+    canvas.height = canvas.parentElement.clientHeight
+
+    const savedData = localStorage.getItem('planner-drawing')
+    if (savedData) {
+      const img = new Image()
+      img.onload = () => {
+        const ctx = getCtx()
+        ctx.drawImage(img, 0, 0)
+      }
+      img.src = savedData
+    }
+
     const resize = () => {
       const parent = canvas.parentElement
       const data = canvas.toDataURL()
@@ -27,7 +41,7 @@ export default function DrawingView() {
       }
       img.src = data
     }
-    resize()
+    
     window.addEventListener('resize', resize)
     return () => window.removeEventListener('resize', resize)
   }, [])
@@ -70,15 +84,26 @@ export default function DrawingView() {
     lastPoint.current = pos
   }, [isDrawing, tool, color, lineWidth])
 
+  const saveCanvas = () => {
+    const canvas = canvasRef.current
+    if (canvas) {
+      localStorage.setItem('planner-drawing', canvas.toDataURL())
+    }
+  }
+
   const endDraw = () => {
-    setIsDrawing(false)
-    lastPoint.current = null
+    if (isDrawing) {
+      setIsDrawing(false)
+      lastPoint.current = null
+      saveCanvas()
+    }
   }
 
   const clearCanvas = () => {
     const canvas = canvasRef.current
     const ctx = getCtx()
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    localStorage.removeItem('planner-drawing')
   }
 
   return (
